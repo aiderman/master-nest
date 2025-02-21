@@ -1,19 +1,20 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { UserService } from './user.service';
+import { CreateUserDto } from './create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from '../user.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Controller('users')
 export class UserController {
-    constructor(
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
-    ) { }
+    constructor(private userService: UserService) { }
 
     @UseGuards(AuthGuard('jwt'))
     @Get()
     async findAll() {
-        return this.userRepository.find();
+        return this.userService.findAll();
+    }
+
+    @Post()
+    async create(@Body() createUserDto: CreateUserDto) {
+        return this.userService.create(createUserDto);
     }
 }

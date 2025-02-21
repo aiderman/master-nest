@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config'; // Import ConfigModule dan ConfigService
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { User } from './user/user.entity';
+import { User } from './user/user.entity'; // Import User entity
+import { UserModule } from './user/user.module'; // Import UserModule
+import { AuthModule } from './auth/auth.module'; // Import AuthModule
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }), // Konfigurasi ConfigModule
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -17,13 +17,13 @@ import { User } from './user/user.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User],
-        synchronize: true, // Hanya untuk development
+        entities: [User], // Daftarkan User entity
+        synchronize: false, // Hanya untuk development
       }),
-      inject: [ConfigService], // Inject ConfigService
+      inject: [ConfigService],
     }),
-    AuthModule,
-    UserModule,
+    UserModule, // Daftarkan UserModule
+    AuthModule, // Tambahkan AuthModule
   ],
   controllers: [],
   providers: [],

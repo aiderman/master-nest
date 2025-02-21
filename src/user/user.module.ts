@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user.entity'; // Import User entity
+import { User } from './user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 
@@ -8,6 +8,6 @@ import { UserController } from './user.controller';
   imports: [TypeOrmModule.forFeature([User])], // Daftarkan User entity
   controllers: [UserController],
   providers: [UserService],
-  exports: [TypeOrmModule.forFeature([User])], // Ekspor UserRepository
+  exports: [UserService], // Ekspor UserService agar bisa digunakan di modul lain
 })
-export class UserModule {}
+export class UserModule { }

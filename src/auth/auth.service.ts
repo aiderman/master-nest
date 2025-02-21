@@ -7,24 +7,24 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User) // Inject UserRepository
-    private userRepository: Repository<User>,
+    @InjectRepository(User) // Menyuntikkan repository
+    private userRepository: Repository<User>, // Ini adalah UserRepository yang akan disuntikkan
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userRepository.findOne({ where: { email } });
     if (user && user.password === password) {
-      const { password, ...result } = user;
-      return result;
+      const { password, ...result } = user; // Menghapus password dari result
+      return result; // Kembalikan informasi pengguna tanpa password
     }
-    return null;
+    return null; // Kembalikan null jika tidak valid
   }
 
   async login(user: any) {
     const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload), // Mengembalikan token JWT
     };
   }
 }
